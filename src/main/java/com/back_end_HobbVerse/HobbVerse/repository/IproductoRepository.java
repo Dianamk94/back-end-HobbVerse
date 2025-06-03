@@ -19,4 +19,5 @@ public interface IproductoRepository extends JpaRepository<Producto, Long> {
 
     //Verifica si existe un producto con el nombre especificado
     boolean existsByNombreProducto(String nombreProducto);
+
 }

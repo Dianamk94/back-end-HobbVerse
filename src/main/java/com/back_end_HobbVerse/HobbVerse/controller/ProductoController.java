@@ -66,12 +66,19 @@ public class ProductoController {
 
     //Endpoint para eliminar un producto por su ID
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProducto(@PathVariable Long id) {
-        if (productoService.getProductoById(id).isPresent()) {
+    public ResponseEntity<String> deleteProducto(@PathVariable Long id) {
+        try {
             productoService.deleteProducto(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Producto eliminado exitosamente.", HttpStatus.NO_CONTENT);
+        } catch (IllegalStateException e) {
+            System.err.println("Error al eliminar producto: " + e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        } catch (RuntimeException e) {
+            System.err.println("Error al eliminar producto: " + e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            System.err.println("Error inesperado al eliminar producto: " + e.getMessage());
+            return new ResponseEntity<>("Error interno del servidor: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

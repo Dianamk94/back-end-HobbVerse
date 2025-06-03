@@ -25,4 +25,6 @@ public interface IproductoService {
     //Obtiene un producto por su categoria
     List<Producto> getProductosByCategoria(String categoria);
 
+
+
 }

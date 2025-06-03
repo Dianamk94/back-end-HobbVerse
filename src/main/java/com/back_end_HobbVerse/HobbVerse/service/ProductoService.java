@@ -1,6 +1,8 @@
 package com.back_end_HobbVerse.HobbVerse.service;
 import com.back_end_HobbVerse.HobbVerse.model.Producto;
 import com.back_end_HobbVerse.HobbVerse.repository.IproductoRepository; // Importa la interfaz del repositorio
+import com.back_end_HobbVerse.HobbVerse.repository.PedidoRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
@@ -15,11 +17,13 @@ public class ProductoService implements IproductoService {
 
     // Inyección de la interfaz del repositorio
     private final IproductoRepository productoRepository;
+    private final PedidoRepository pedidoRepository;
 
     // Constructor para inyectar la dependencia de IproductoRepository
     @Autowired
-    public ProductoService(IproductoRepository productoRepository) {
+    public ProductoService(IproductoRepository productoRepository, PedidoRepository pedidoRepository) {
         this.productoRepository = productoRepository;
+        this.pedidoRepository = pedidoRepository;
     }
 
     //Llamar al método save() del repositorio
@@ -63,16 +67,6 @@ public class ProductoService implements IproductoService {
         }
 
         @Override
-        public void deleteProducto(Long id) {
-            if (productoRepository.existsById(id)) {
-                productoRepository.deleteById(id);
-            } else {
-                // Opcional: Podrías lanzar una excepción más específica aquí
-                throw new IllegalArgumentException("Producto con ID " + id + " no encontrado para eliminación.");
-            }
-        }
-
-        @Override
         public Optional<Producto> getProductoByNombre(String nombre) {
             return productoRepository.findByNombreProducto(nombre);
         }
@@ -81,5 +75,18 @@ public class ProductoService implements IproductoService {
         public List<Producto> getProductosByCategoria(String categoria) {
             return productoRepository.findByCategoria(categoria);
         }
+
+    @Transactional
+    public void deleteProducto(Long idProducto) {
+        if (!productoRepository.existsById(idProducto)) {
+            throw new RuntimeException("Producto con ID " + idProducto + " no encontrado.");
+        }
+
+        if (pedidoRepository.existsByProducto_IdProducto(idProducto)) {
+            throw new IllegalStateException("No se puede eliminar el producto, está referenciado en pedidos.");
+        }
+
+        productoRepository.deleteById(idProducto);
+    }
 
     }
