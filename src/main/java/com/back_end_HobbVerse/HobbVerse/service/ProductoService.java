@@ -82,8 +82,4 @@ public class ProductoService implements IproductoService {
             return productoRepository.findByCategoria(categoria);
         }
 
-        @Override
-        public List<Producto> getProductosByPrecioRango(BigDecimal min, BigDecimal max) {
-            return productoRepository.findByPrecioBetween(min, max);
-        }
     }

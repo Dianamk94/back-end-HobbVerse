@@ -9,23 +9,28 @@ import java.util.List;
 import java.util.Optional;
 import java.math.BigDecimal;
 
+//Controlador Rest: maneja las peticiones HTTP
 @RestController
 @RequestMapping("/api/productos")
 public class ProductoController {
 
+    //Inyección de la interfaz productoService
     private final IproductoService productoService;
 
+    //Constructor para inyección IproductoService
     @Autowired
     public ProductoController(IproductoService productoService) {
         this.productoService = productoService;
     }
 
+    //Endpoint para crear un nuevo producto
     @PostMapping
     public ResponseEntity<Producto> createProducto(@RequestBody Producto producto) {
         Producto savedProducto = productoService.saveProducto(producto);
         return new ResponseEntity<>(savedProducto, HttpStatus.CREATED);
     }
 
+    //Endpoint para obtener un producto por su ID
     @GetMapping("/{id}")
     public ResponseEntity<Producto> getProductoById(@PathVariable Long id) {
         Optional<Producto> producto = productoService.getProductoById(id);
@@ -33,12 +38,14 @@ public class ProductoController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    //Endpoint para obtener la lista de productos
     @GetMapping
     public ResponseEntity<List<Producto>> getAllProductos() {
         List<Producto> productos = productoService.getAllProductos();
         return new ResponseEntity<>(productos, HttpStatus.OK);
     }
 
+    //Endpoint para actualizar un producto existente
     @PutMapping("/{id}")
     public ResponseEntity<Producto> updateProducto(@PathVariable Long id, @RequestBody Producto productoDetails) {
         Optional<Producto> existingProductoOptional = productoService.getProductoById(id);
@@ -57,6 +64,7 @@ public class ProductoController {
         }
     }
 
+    //Endpoint para eliminar un producto por su ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProducto(@PathVariable Long id) {
         if (productoService.getProductoById(id).isPresent()) {
@@ -67,6 +75,7 @@ public class ProductoController {
         }
     }
 
+    //Endpoint para buscar un producto por su nombre
     @GetMapping("/nombre/{nombre}")
     public ResponseEntity<Producto> getProductoByNombre(@PathVariable String nombre) {
         Optional<Producto> producto = productoService.getProductoByNombre(nombre);
@@ -74,6 +83,7 @@ public class ProductoController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    //Endpoint para buscar un producto por su categoria
     @GetMapping("/categoria/{categoria}")
     public ResponseEntity<List<Producto>> getProductosByCategoria(@PathVariable String categoria) {
         List<Producto> productos = productoService.getProductosByCategoria(categoria);
@@ -83,14 +93,4 @@ public class ProductoController {
         return new ResponseEntity<>(productos, HttpStatus.OK);
     }
 
-    @GetMapping("/precio-rango")
-    public ResponseEntity<List<Producto>> getProductosByPrecioRango(
-            @RequestParam BigDecimal min,
-            @RequestParam BigDecimal max) {
-        List<Producto> productos = productoService.getProductosByPrecioRango(min, max);
-        if (productos.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(productos, HttpStatus.OK);
-    }
 }

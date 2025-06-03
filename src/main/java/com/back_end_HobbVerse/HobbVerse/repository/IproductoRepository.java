@@ -11,8 +11,12 @@ import java.util.Optional;
 @Repository
 public interface IproductoRepository extends JpaRepository<Producto, Long> {
 
+    //Busca un producto por su nombre
     Optional<Producto> findByNombreProducto(String nombreProducto);
+
+    //Busca un porducto por su categoria
     List<Producto> findByCategoria(String categoria);
-    List<Producto> findByPrecioBetween(BigDecimal minPrecio, BigDecimal maxPrecio);
+
+    //Verifica si existe un producto con el nombre especificado
     boolean existsByNombreProducto(String nombreProducto);
 }
