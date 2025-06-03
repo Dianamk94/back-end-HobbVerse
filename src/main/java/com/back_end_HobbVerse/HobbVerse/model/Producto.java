@@ -7,16 +7,16 @@ import java.math.BigDecimal;
 //Entidad Producto
 
 @Entity
-@Table(name = "HobbVerse")
+@Table(name = "producto")
 
 public class Producto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Id_Producto")
+    @Column(name = "id_producto")
     private Long idProducto;
 
-    @Column(name = "Nombre_Producto", nullable = false, length = 255)
+    @Column(name = "nombre_producto", nullable = false, length = 255)
     private  String nombreProducto;
 
     @Column(nullable = false)
