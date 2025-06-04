@@ -4,8 +4,10 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 
+//Entidad Producto
+
 @Entity
-@Table(name = "Producto")
+@Table(name = "producto")
 
 public class Producto {
 
@@ -14,7 +16,7 @@ public class Producto {
     @Column(name = "id_producto")
     private Long idProducto;
 
-    @Column(name = "Nombre_Producto", nullable = false, length = 255)
+    @Column(name = "nombre_producto", nullable = false, length = 255)
     private  String nombreProducto;
 
     @Column(nullable = false)
@@ -30,9 +32,12 @@ public class Producto {
     private String descripcion;
 
 
+    // Contructor vacio
+
     public Producto() {
     }
 
+    // Constructor lleno
 
     public Producto(String nombreProducto, Integer cantidad, BigDecimal precio, String categoria, String descripcion) {
         this.nombreProducto = nombreProducto;
@@ -42,6 +47,7 @@ public class Producto {
         this.descripcion = descripcion;
     }
 
+    //Getter y Setter
 
     public Long getIdProducto() {
         return idProducto;
