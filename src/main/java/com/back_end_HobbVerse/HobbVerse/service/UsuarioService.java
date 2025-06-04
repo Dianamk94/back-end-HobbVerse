@@ -48,11 +48,11 @@ public class UsuarioService implements  IusuarioService{
 
         if(usuarioExistete != null){
 
-            usuarioExistete.setNombre_completo(usuarioActualizado.getNombre_completo());
+            usuarioExistete.setNombreCompleto(usuarioActualizado.getNombreCompleto());
             usuarioExistete.setTelefono(usuarioActualizado.getTelefono());
             usuarioExistete.setEmail(usuarioActualizado.getEmail());
-            usuarioExistete.setContraseña(usuarioActualizado.getContraseña());
-            usuarioExistete.setFecha_registro(usuarioActualizado.getFecha_registro());
+            usuarioExistete.setContrasena(usuarioActualizado.getContrasena());
+            usuarioExistete.setFechaRegistro(usuarioActualizado.getFechaRegistro());
 
             usuarioRepository.save(usuarioExistete);
         } else{
