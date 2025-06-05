@@ -27,7 +27,7 @@ public class UsuarioController {
     public Usuario obtenerPorId(@PathVariable Long id){
         return usuarioService.obtenerPorId(id);
     }
-
+    /* Post Mapping para guardar un usuario */
     @PostMapping
     public ResponseEntity<String>guardarUsuario(@RequestBody Usuario usuario){
         usuarioService.guardarUsuario(usuario);
