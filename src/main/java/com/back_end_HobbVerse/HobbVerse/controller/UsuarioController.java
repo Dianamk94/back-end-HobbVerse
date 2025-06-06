@@ -1,5 +1,6 @@
 package com.back_end_HobbVerse.HobbVerse.controller;
 
+import com.back_end_HobbVerse.HobbVerse.model.Pedido;
 import com.back_end_HobbVerse.HobbVerse.model.Usuario;
 import com.back_end_HobbVerse.HobbVerse.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -24,26 +26,31 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    public Usuario obtenerPorId(@PathVariable Long id){
-        return usuarioService.obtenerPorId(id);
+    public Optional<Usuario> obtenerPorId(@PathVariable Long id){
+
+        return usuarioService.buscarUsuarioId(id);
     }
     /* Post Mapping para guardar un usuario */
     @PostMapping
     public ResponseEntity<String>guardarUsuario(@RequestBody Usuario usuario){
-        usuarioService.guardarUsuario(usuario);
+        usuarioService.crearUsuario(usuario);
         return ResponseEntity.ok("Usuario guardado con exito");
     }
 
     @DeleteMapping("/borrar/{id}")
     public  ResponseEntity<String>deleteUsuario(@PathVariable Long id){
-        usuarioService.deleteUsuario(id);
+        usuarioService.eliminarUsuario(id);
         return ResponseEntity.ok("Usuario eliminado con exito");
     }
 
     @PutMapping("/editar/{id}")
-    public ResponseEntity<String>editarUsuario(@PathVariable Long id, @RequestBody Usuario usuarioActualizado){
-        usuarioService.editarUsuario(id, usuarioActualizado);
-        return ResponseEntity.ok("Usuario actualizado con exito");
+    public ResponseEntity<Usuario> actualizarPedido(@RequestBody Usuario usuario, @PathVariable Long id){
+        try {
+            Usuario actualizado = usuarioService.actualizarUsuario(usuario, id);
+            return ResponseEntity.ok(actualizado);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }

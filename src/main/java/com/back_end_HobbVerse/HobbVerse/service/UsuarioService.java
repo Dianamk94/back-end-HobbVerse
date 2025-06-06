@@ -2,61 +2,50 @@ package com.back_end_HobbVerse.HobbVerse.service;
 
 import com.back_end_HobbVerse.HobbVerse.model.Usuario;
 import com.back_end_HobbVerse.HobbVerse.repository.IusuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
-public class UsuarioService implements  IusuarioService{
+public class UsuarioService{
 
     private final IusuarioRepository usuarioRepository;
 
-    @Autowired
-    public UsuarioService(IusuarioRepository iusuarioRepository, IusuarioRepository usuarioRepository) {
+
+    public UsuarioService(IusuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
 
-    @Override
-    public List<Usuario> obtenerTodos() {
+    public List<Usuario> obtenerTodos(){
         return usuarioRepository.findAll();
     }
 
-    @Override
-    public Usuario obtenerPorId(Long id) {
-        return usuarioRepository.findById(id).orElse(null);
+    public Usuario crearUsuario(Usuario usuario){
+        return usuarioRepository.save(usuario);
     }
 
-    @Override
-    public void guardarUsuario(Usuario usuario) {
-        usuarioRepository.save(usuario);
-
+    public Optional<Usuario> buscarUsuarioId(Long id){
+        return usuarioRepository.findById(id);
     }
 
-    @Override
-    public void deleteUsuario(Long id) {
-        usuarioRepository.deleteById(id);
+    public Usuario actualizarUsuario(Usuario usuario, Long id) {
+        return usuarioRepository.findById(id)
+                .map(usuarioActual -> {
+                    usuarioActual.setNombreCompleto(usuario.getNombreCompleto());
+                    usuarioActual.setContrasena(usuario.getContrasena());
+                    usuarioActual.setEmail(usuario.getContrasena());
+                    usuarioActual.setTelefono(usuario.getTelefono());
+                    usuarioActual.setFechaRegistro(usuario.getFechaRegistro());
+                    return usuarioRepository.save(usuarioActual);
+                })
+                .orElseThrow(() -> new RuntimeException("Pedido no encontrado con id: " + id));
     }
 
-    @Override
-    public void updateUsuario(Long id, Usuario usuarioActualizado) {
-
-    }
-
-    @Override
-    public void editarUsuario(Long id, Usuario usuarioActualizado) {
-        Usuario usuarioExistete = usuarioRepository.findById(id).orElse(null);
-
-        if(usuarioExistete != null){
-
-            usuarioExistete.setNombreCompleto(usuarioActualizado.getNombreCompleto());
-            usuarioExistete.setTelefono(usuarioActualizado.getTelefono());
-            usuarioExistete.setEmail(usuarioActualizado.getEmail());
-            usuarioExistete.setContrasena(usuarioActualizado.getContrasena());
-            usuarioExistete.setFechaRegistro(usuarioActualizado.getFechaRegistro());
-
-            usuarioRepository.save(usuarioExistete);
-        } else{
-            throw new RuntimeException("Usuario no encontrado con el id: " + id);
-        }
+    public void eliminarUsuario(Long id) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pedido no encontrado con id: " + id));
+        usuarioRepository.delete(usuario);
     }
 }
+
