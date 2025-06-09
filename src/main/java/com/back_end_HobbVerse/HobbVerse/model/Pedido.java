@@ -13,7 +13,7 @@ public class Pedido {
     private Long idPedido;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", nullable = false)
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id", nullable = false)
     private Usuario usuario;
 
     @ManyToOne(optional = false)
