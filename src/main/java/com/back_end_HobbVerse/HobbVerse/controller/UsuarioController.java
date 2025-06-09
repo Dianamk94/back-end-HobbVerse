@@ -1,13 +1,14 @@
 package com.back_end_HobbVerse.HobbVerse.controller;
 
-import com.back_end_HobbVerse.HobbVerse.model.Pedido;
 import com.back_end_HobbVerse.HobbVerse.model.Usuario;
 import com.back_end_HobbVerse.HobbVerse.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -32,9 +33,12 @@ public class UsuarioController {
     }
     /* Post Mapping para guardar un usuario */
     @PostMapping
-    public ResponseEntity<String>guardarUsuario(@RequestBody Usuario usuario){
+    public ResponseEntity<Map<String, Object>> guardarUsuario(@RequestBody Usuario usuario) {
         usuarioService.crearUsuario(usuario);
-        return ResponseEntity.ok("Usuario guardado con exito");
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("message", "Usuario guardado con éxito");
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/borrar/{id}")
