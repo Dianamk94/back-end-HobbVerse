@@ -25,7 +25,9 @@ public class UsuarioService{
     }
 
     public Usuario crearUsuario(Usuario usuario){
+        System.out.println("Pass original: " + usuario.getContrasena());
         String passEncriptada = passwordEncoder.encode(usuario.getContrasena());
+        System.out.println("Pass encriptada: " + passEncriptada);
         usuario.setContrasena(passEncriptada);
         return usuarioRepository.save(usuario);
     }
